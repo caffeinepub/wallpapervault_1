@@ -5,10 +5,14 @@ import { SearchBar } from "./SearchBar";
 
 const HEADER_CATEGORIES = [
   "Anime",
+  "Movies",
   "Nature",
   "Cars",
   "Gaming",
   "AMOLED",
+  "Space",
+  "Minimal",
+  "Cricket",
 ] as const;
 
 interface HeaderProps {

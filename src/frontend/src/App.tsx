@@ -4,6 +4,7 @@ import {
   Flame,
   Layers,
   LayoutGrid,
+  Search,
   TrendingUp,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -22,11 +23,13 @@ import { ContactPage } from "@/components/pages/ContactPage";
 import { PrivacyPolicyPage } from "@/components/pages/PrivacyPolicyPage";
 import { TermsOfServicePage } from "@/components/pages/TermsOfServicePage";
 import { useDownloadCounts } from "@/hooks/useDownloadCounts";
+import { useJikanSearch } from "@/hooks/useJikanSearch";
 
 import {
   CATEGORIES,
   WALLPAPERS,
   type Wallpaper,
+  generateWallpapersForKeyword,
   getTrendingWallpapers,
   getWallpapersByCategory,
   searchWallpapers,
@@ -57,6 +60,13 @@ export default function App() {
   const mainRef = useRef<HTMLElement>(null);
 
   const { getCount, increment } = useDownloadCounts();
+  const {
+    jikanResults,
+    isLoading: jikanLoading,
+    error: jikanError,
+    search: jikanSearch,
+    clear: jikanClear,
+  } = useJikanSearch();
 
   // Scroll detection for header
   useEffect(() => {
@@ -72,16 +82,21 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [scrollTrigger]);
 
-  const handleSearch = useCallback((query: string) => {
-    const trimmed = query.trim();
-    if (trimmed) {
-      setSearchQuery(trimmed);
-      setView("search");
-    } else {
-      setSearchQuery("");
-      setView("home");
-    }
-  }, []);
+  const handleSearch = useCallback(
+    (query: string) => {
+      const trimmed = query.trim();
+      if (trimmed) {
+        setSearchQuery(trimmed);
+        setView("search");
+        jikanSearch(trimmed);
+      } else {
+        setSearchQuery("");
+        setView("home");
+        jikanClear();
+      }
+    },
+    [jikanSearch, jikanClear],
+  );
 
   const handleSearchChange = useCallback((value: string) => {
     setLiveSearchQuery(value);
@@ -93,7 +108,8 @@ export default function App() {
     setLiveSearchQuery("");
     setSelectedCategory("");
     setSelectedWallpaper(null);
-  }, []);
+    jikanClear();
+  }, [jikanClear]);
 
   const handleCategoryClick = useCallback((name: string) => {
     if (name === "") {
@@ -169,6 +185,11 @@ export default function App() {
   );
 
   const searchResults = view === "search" ? searchWallpapers(searchQuery) : [];
+  const isSearchGenerated =
+    view === "search" && searchQuery.length > 0 && searchResults.length === 0;
+  const displaySearchResults = isSearchGenerated
+    ? generateWallpapersForKeyword(searchQuery)
+    : searchResults;
   const categoryWallpapers =
     view === "category" ? getWallpapersByCategory(selectedCategory) : [];
 
@@ -240,7 +261,11 @@ export default function App() {
             >
               <SearchPage
                 query={searchQuery}
-                results={searchResults}
+                results={displaySearchResults}
+                isGenerated={isSearchGenerated}
+                jikanResults={jikanResults}
+                jikanLoading={jikanLoading}
+                jikanError={jikanError}
                 onBack={handleGoHome}
                 onSearchChange={handleSearchChange}
                 onSearch={handleSearch}
@@ -552,6 +577,7 @@ function CategoryPage({
     Space: "🚀",
     Minimal: "◻️",
     Movies: "🎬",
+    Cricket: "🏏",
   };
 
   return (
@@ -609,6 +635,10 @@ function CategoryPage({
 interface SearchPageProps {
   query: string;
   results: Wallpaper[];
+  isGenerated: boolean;
+  jikanResults: Wallpaper[];
+  jikanLoading: boolean;
+  jikanError: string | null;
   onBack: () => void;
   onSearchChange: (value: string) => void;
   onSearch: (query: string) => void;
@@ -620,6 +650,10 @@ interface SearchPageProps {
 function SearchPage({
   query,
   results,
+  isGenerated,
+  jikanResults,
+  jikanLoading,
+  jikanError,
   onBack,
   onSearchChange,
   onSearch,
@@ -633,7 +667,7 @@ function SearchPage({
       <div className="mb-8">
         <button
           type="button"
-          data-ocid="category.back_button"
+          data-ocid="search.back_button"
           onClick={onBack}
           className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors duration-150 text-sm mb-4"
           aria-label="Back to home"
@@ -664,12 +698,110 @@ function SearchPage({
         </div>
       </div>
 
-      <WallpaperGrid
-        wallpapers={results}
-        onWallpaperClick={onWallpaperClick}
-        onDownload={onDownload}
-        getDownloadCount={getDownloadCount}
-      />
+      {/* Generated results notice banner */}
+      {isGenerated && results.length > 0 && (
+        <div
+          data-ocid="search.success_state"
+          className="mb-6 px-4 py-3 rounded-xl bg-primary/10 border border-primary/20 text-sm text-muted-foreground flex items-start gap-2"
+        >
+          <Search className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+          <span>
+            No exact matches found — showing auto-generated results for{" "}
+            <span className="text-primary font-semibold">
+              &ldquo;{query}&rdquo;
+            </span>
+            . Try a more specific term like{" "}
+            <span className="text-foreground font-medium">
+              &ldquo;naruto&rdquo;
+            </span>
+            ,{" "}
+            <span className="text-foreground font-medium">
+              &ldquo;avengers&rdquo;
+            </span>
+            , or{" "}
+            <span className="text-foreground font-medium">
+              &ldquo;spider-man&rdquo;
+            </span>
+            .
+          </span>
+        </div>
+      )}
+
+      {/* Results grid */}
+      {results.length > 0 ? (
+        <div data-ocid="search.results_section">
+          <WallpaperGrid
+            wallpapers={results}
+            onWallpaperClick={onWallpaperClick}
+            onDownload={onDownload}
+            getDownloadCount={getDownloadCount}
+          />
+        </div>
+      ) : (
+        <div
+          data-ocid="search.empty_state"
+          className="flex flex-col items-center justify-center py-16 text-muted-foreground gap-3"
+        >
+          <Search className="w-10 h-10 opacity-30" />
+          <p className="text-lg font-medium">No wallpapers found</p>
+          <p className="text-sm opacity-70">Try a different search term</p>
+        </div>
+      )}
+
+      {/* ── MyAnimeList / Jikan live results ─────────────────── */}
+      {(jikanLoading || jikanResults.length > 0 || jikanError) && (
+        <section className="mt-12" aria-label="MyAnimeList search results">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="flex items-center gap-2">
+              <span className="text-xl">⛩️</span>
+              <h2 className="text-foreground font-bold text-xl font-heading tracking-tight">
+                From MyAnimeList
+              </h2>
+            </div>
+            <span className="px-2 py-0.5 rounded-full bg-muted text-muted-foreground text-xs font-medium border border-border">
+              Live
+            </span>
+            {jikanLoading && (
+              <span
+                data-ocid="search.loading_state"
+                className="text-xs text-muted-foreground animate-pulse"
+              >
+                Fetching…
+              </span>
+            )}
+          </div>
+
+          {jikanError && (
+            <div
+              data-ocid="search.error_state"
+              className="px-4 py-3 rounded-xl bg-destructive/10 border border-destructive/20 text-sm text-destructive"
+            >
+              {jikanError}
+            </div>
+          )}
+
+          {jikanLoading && jikanResults.length === 0 && (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 sm:gap-4">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div
+                  // biome-ignore lint/suspicious/noArrayIndexKey: skeleton placeholders
+                  key={i}
+                  className="aspect-[3/4] rounded-xl bg-muted animate-pulse"
+                />
+              ))}
+            </div>
+          )}
+
+          {jikanResults.length > 0 && (
+            <WallpaperGrid
+              wallpapers={jikanResults}
+              onWallpaperClick={onWallpaperClick}
+              onDownload={onDownload}
+              getDownloadCount={getDownloadCount}
+            />
+          )}
+        </section>
+      )}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import type { Wallpaper } from "./wallpapers";
 
 // ─── Movie Wallpapers (1500 total) ────────────────────────────
-// IDs: 10000–11499
+// IDs: 20000–21499 (anime uses 10000–11999)
 // Franchises: Avengers, Spider-Man, Batman, Joker, Avatar,
 //             John Wick, Fast & Furious, Transformers, Star Wars
 // ~167 per franchise
@@ -161,7 +161,7 @@ const MOVIES: MovieDef[] = [
   },
   {
     name: "Spider-Man",
-    tags: ["spider-man", "marvel", "spidey", "web", "nyc"],
+    tags: ["spider-man", "spiderman", "marvel", "spidey", "web", "nyc"],
     imgs: SPIDERMAN_IMGS,
     titles: [
       "Web Slinger NYC",
@@ -269,7 +269,14 @@ const MOVIES: MovieDef[] = [
   },
   {
     name: "John Wick",
-    tags: ["john wick", "keanu reeves", "assassin", "continental", "action"],
+    tags: [
+      "john wick",
+      "johnwick",
+      "keanu reeves",
+      "assassin",
+      "continental",
+      "action",
+    ],
     imgs: JOHNWICK_IMGS,
     titles: [
       "Baba Yaga Returns",
@@ -298,6 +305,8 @@ const MOVIES: MovieDef[] = [
     name: "Fast & Furious",
     tags: [
       "fast furious",
+      "fastfurious",
+      "fast and furious",
       "cars",
       "racing",
       "vin diesel",
@@ -363,7 +372,15 @@ const MOVIES: MovieDef[] = [
   },
   {
     name: "Star Wars",
-    tags: ["star wars", "jedi", "sith", "lightsaber", "force", "galaxy"],
+    tags: [
+      "star wars",
+      "starwars",
+      "jedi",
+      "sith",
+      "lightsaber",
+      "force",
+      "galaxy",
+    ],
     imgs: STARWARS_IMGS,
     titles: [
       "Darth Vader Silhouette",
@@ -395,7 +412,7 @@ const DEVICE_TYPES: Array<"desktop" | "mobile"> = ["desktop", "mobile"];
 
 function buildMovieWallpapers(): Wallpaper[] {
   const wallpapers: Wallpaper[] = [];
-  let id = 10000;
+  let id = 20000; // Start after anime IDs (10000–11999) to avoid collisions
 
   for (const movie of MOVIES) {
     // How many wallpapers for this franchise (~167 each to reach 1500 total)
@@ -427,7 +444,13 @@ function buildMovieWallpapers(): Wallpaper[] {
         tags: [
           ...movie.tags,
           movie.name.toLowerCase().replace(/\s+&\s+/g, "-"),
+          movie.name
+            .toLowerCase()
+            .replace(/[\s&-]+/g, ""), // no-space variant e.g. "spiderman"
           resolution.toLowerCase(),
+          "movie",
+          "movies",
+          "film",
         ],
         isTrending,
       });

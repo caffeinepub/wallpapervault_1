@@ -1,4 +1,5 @@
 import { ANIME_SERIES_WALLPAPERS } from "./animeWallpapers";
+import { CRICKET_WALLPAPERS } from "./cricketWallpapers";
 import { MOVIE_WALLPAPERS } from "./movieWallpapers";
 
 export type Wallpaper = {
@@ -12,7 +13,8 @@ export type Wallpaper = {
     | "AMOLED"
     | "Space"
     | "Minimal"
-    | "Movies";
+    | "Movies"
+    | "Cricket";
   resolution: "HD" | "2K" | "4K";
   deviceType: "desktop" | "mobile";
   imageUrl: string;
@@ -6569,8 +6571,878 @@ export const WALLPAPERS: Wallpaper[] = [
     tags: ["minimal", "soft", "peach", "warm"],
     isTrending: false,
   },
+  // ─── USER-SUBMITTED WALLPAPERS ───────────────────────────────
+  {
+    id: 40004,
+    title: "Luffy Gear 5",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=3840&q=95",
+    tags: ["luffy", "one piece", "onepiece", "gear5", "anime", "4k"],
+    isTrending: true,
+  },
+  {
+    id: 40005,
+    title: "Zoro Wano",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1560343787-92a01e3f6e2c?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1560343787-92a01e3f6e2c?w=3840&q=95",
+    tags: ["zoro", "wano", "one piece", "onepiece", "anime", "4k"],
+    isTrending: true,
+  },
+  {
+    id: 40006,
+    title: "Forest Nature",
+    category: "Nature",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=3840&q=95",
+    tags: ["forest", "nature", "green", "trees", "4k"],
+    isTrending: false,
+  },
+  {
+    id: 40000,
+    title: "Luffy Gear 5",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=3840&q=95",
+    tags: ["one piece", "onepiece", "luffy", "gear5", "anime", "4k"],
+    isTrending: true,
+  },
+  {
+    id: 40001,
+    title: "Zoro Sword",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=3840&q=95",
+    tags: ["one piece", "onepiece", "zoro", "sword", "anime", "4k"],
+    isTrending: true,
+  },
+  {
+    id: 40002,
+    title: "Naruto Sage Mode",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1560343787-92a01e3f6e2c?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1560343787-92a01e3f6e2c?w=3840&q=95",
+    tags: ["naruto", "sage mode", "sagemode", "hokage", "anime", "4k"],
+    isTrending: true,
+  },
+  {
+    id: 40003,
+    title: "Nature Forest",
+    category: "Nature",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=3840&q=95",
+    tags: ["forest", "nature", "green", "trees", "4k"],
+    isTrending: false,
+  },
   ...(ANIME_SERIES_WALLPAPERS as Wallpaper[]),
   ...(MOVIE_WALLPAPERS as Wallpaper[]),
+  ...(CRICKET_WALLPAPERS as Wallpaper[]),
+
+  // ─── ONE PIECE (10) ───────────────────────────────────────────
+  {
+    id: 40010,
+    title: "Luffy Gear 5",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=3840&q=95",
+    tags: ["one piece", "luffy", "gear 5", "straw hat", "anime"],
+    isTrending: true,
+  },
+  {
+    id: 40011,
+    title: "Zoro Three Sword Style",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1601850494422-3cf14624b0b3?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1601850494422-3cf14624b0b3?w=3840&q=95",
+    tags: ["one piece", "zoro", "sword", "roronoa", "anime"],
+    isTrending: true,
+  },
+  {
+    id: 40012,
+    title: "Nami Navigation",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "mobile",
+    imageUrl:
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=95",
+    tags: ["one piece", "nami", "navigator", "ocean", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40013,
+    title: "Sanji Fire Kick",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1518791841217-8f162f1912da?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1518791841217-8f162f1912da?w=3840&q=95",
+    tags: ["one piece", "sanji", "diable jambe", "fire", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40014,
+    title: "Shanks Red Hair",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=3840&q=95",
+    tags: ["one piece", "shanks", "red hair", "yonko", "anime"],
+    isTrending: true,
+  },
+  {
+    id: 40015,
+    title: "Ace Fire Fist",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=1920&q=95",
+    tags: ["one piece", "ace", "fire fist", "portgas", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40016,
+    title: "Robin Archaeology",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "mobile",
+    imageUrl:
+      "https://images.unsplash.com/photo-1490750967868-88df5691cc41?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1490750967868-88df5691cc41?w=1920&q=95",
+    tags: ["one piece", "robin", "nico robin", "archaeology", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40017,
+    title: "Thousand Sunny Ship",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1509233725247-49e657c54213?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1509233725247-49e657c54213?w=3840&q=95",
+    tags: ["one piece", "thousand sunny", "ship", "sea", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40018,
+    title: "Law Trafalgar Surgeon",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1560343787-92a01e3f6e2c?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1560343787-92a01e3f6e2c?w=3840&q=95",
+    tags: ["one piece", "trafalgar law", "surgeon of death", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40019,
+    title: "Whitebeard Emperor",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1605106702842-01a887a31122?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1605106702842-01a887a31122?w=1920&q=95",
+    tags: ["one piece", "whitebeard", "edward newgate", "yonko", "anime"],
+    isTrending: false,
+  },
+
+  // ─── NARUTO (10) ──────────────────────────────────────────────
+  {
+    id: 40020,
+    title: "Naruto Sage Mode",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=3840&q=95",
+    tags: ["naruto", "sage mode", "uzumaki", "hokage", "anime"],
+    isTrending: true,
+  },
+  {
+    id: 40021,
+    title: "Sasuke Rinnegan",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=3840&q=95",
+    tags: ["naruto", "sasuke", "uchiha", "rinnegan", "anime"],
+    isTrending: true,
+  },
+  {
+    id: 40022,
+    title: "Kakashi Sharingan",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "mobile",
+    imageUrl:
+      "https://images.unsplash.com/photo-1614850715649-1d0106293bd1?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1614850715649-1d0106293bd1?w=1920&q=95",
+    tags: ["naruto", "kakashi", "hatake", "sharingan", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40023,
+    title: "Itachi Amaterasu",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=3840&q=95",
+    tags: ["naruto", "itachi", "uchiha", "amaterasu", "mangekyou", "anime"],
+    isTrending: true,
+  },
+  {
+    id: 40024,
+    title: "Jiraiya Sage",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?w=1920&q=95",
+    tags: ["naruto", "jiraiya", "sage", "toad", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40025,
+    title: "Minato Fourth Hokage",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=3840&q=95",
+    tags: ["naruto", "minato", "namikaze", "fourth hokage", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40026,
+    title: "Gaara Sand Armour",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "mobile",
+    imageUrl:
+      "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1920&q=95",
+    tags: ["naruto", "gaara", "sand", "kazekage", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40027,
+    title: "Obito Mask",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=3840&q=95",
+    tags: ["naruto", "obito", "uchiha", "mask", "tobi", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40028,
+    title: "Kurama Nine Tails",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=3840&q=95",
+    tags: ["naruto", "kurama", "nine tails", "bijuu", "fox", "anime"],
+    isTrending: true,
+  },
+  {
+    id: 40029,
+    title: "Sakura Cherry Blossom",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "mobile",
+    imageUrl:
+      "https://images.unsplash.com/photo-1490750967868-88df5691cc41?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1490750967868-88df5691cc41?w=1920&q=95",
+    tags: ["naruto", "sakura", "haruno", "cherry blossom", "anime"],
+    isTrending: false,
+  },
+
+  // ─── BLEACH (10) ──────────────────────────────────────────────
+  {
+    id: 40030,
+    title: "Ichigo Bankai",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1607462109225-6b64ae2dd3cb?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1607462109225-6b64ae2dd3cb?w=3840&q=95",
+    tags: ["bleach", "ichigo", "kurosaki", "bankai", "shinigami", "anime"],
+    isTrending: true,
+  },
+  {
+    id: 40031,
+    title: "Rukia Ice Dragon",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "mobile",
+    imageUrl:
+      "https://images.unsplash.com/photo-1517281862878-5c7b4d5e9a6f?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1517281862878-5c7b4d5e9a6f?w=1920&q=95",
+    tags: ["bleach", "rukia", "kuchiki", "ice", "sode no shirayuki", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40032,
+    title: "Byakuya Senbonzakura",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1490750967868-88df5691cc41?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1490750967868-88df5691cc41?w=3840&q=95",
+    tags: ["bleach", "byakuya", "kuchiki", "senbonzakura", "petals", "anime"],
+    isTrending: true,
+  },
+  {
+    id: 40033,
+    title: "Aizen Transformation",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=3840&q=95",
+    tags: ["bleach", "aizen", "sosuke", "villain", "hogyoku", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40034,
+    title: "Toshiro Hitsugaya",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1484488494157-e38f63f33cd4?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1484488494157-e38f63f33cd4?w=1920&q=95",
+    tags: ["bleach", "hitsugaya", "toshiro", "ice dragon", "captain", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40035,
+    title: "Renji Zabimaru",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "mobile",
+    imageUrl:
+      "https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=1920&q=95",
+    tags: ["bleach", "renji", "abarai", "zabimaru", "lieutenant", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40036,
+    title: "Yhwach Quincy King",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1518791841217-8f162f1912da?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1518791841217-8f162f1912da?w=3840&q=95",
+    tags: ["bleach", "yhwach", "quincy", "thousand year blood war", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40037,
+    title: "Yoruichi Flash Goddess",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=1920&q=95",
+    tags: ["bleach", "yoruichi", "shihoin", "flash goddess", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40038,
+    title: "Grimmjow Espada",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1560343787-92a01e3f6e2c?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1560343787-92a01e3f6e2c?w=3840&q=95",
+    tags: ["bleach", "grimmjow", "espada", "hollow", "arrancar", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40039,
+    title: "Soul Society Sunset",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1601850494422-3cf14624b0b3?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1601850494422-3cf14624b0b3?w=3840&q=95",
+    tags: ["bleach", "soul society", "shinigami", "seireitei", "anime"],
+    isTrending: true,
+  },
+
+  // ─── DEMON SLAYER (10) ────────────────────────────────────────
+  {
+    id: 40040,
+    title: "Tanjiro Water Breathing",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=3840&q=95",
+    tags: [
+      "demon slayer",
+      "tanjiro",
+      "kamado",
+      "water breathing",
+      "kimetsu",
+      "anime",
+    ],
+    isTrending: true,
+  },
+  {
+    id: 40041,
+    title: "Nezuko Blood Demon Art",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "mobile",
+    imageUrl:
+      "https://images.unsplash.com/photo-1614850715649-1d0106293bd1?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1614850715649-1d0106293bd1?w=1920&q=95",
+    tags: [
+      "demon slayer",
+      "nezuko",
+      "kamado",
+      "blood demon art",
+      "kimetsu",
+      "anime",
+    ],
+    isTrending: true,
+  },
+  {
+    id: 40042,
+    title: "Zenitsu Thunder Breathing",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=3840&q=95",
+    tags: ["demon slayer", "zenitsu", "agatsuma", "thunder breathing", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40043,
+    title: "Inosuke Beast Breathing",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=1920&q=95",
+    tags: ["demon slayer", "inosuke", "hashibira", "beast breathing", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40044,
+    title: "Rengoku Flame Hashira",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=3840&q=95",
+    tags: [
+      "demon slayer",
+      "rengoku",
+      "kyojuro",
+      "flame hashira",
+      "mugen train",
+      "anime",
+    ],
+    isTrending: true,
+  },
+  {
+    id: 40045,
+    title: "Muzan Kibutsuji",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1518791841217-8f162f1912da?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1518791841217-8f162f1912da?w=3840&q=95",
+    tags: [
+      "demon slayer",
+      "muzan",
+      "kibutsuji",
+      "demon king",
+      "kimetsu",
+      "anime",
+    ],
+    isTrending: false,
+  },
+  {
+    id: 40046,
+    title: "Shinobu Insect Hashira",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "mobile",
+    imageUrl:
+      "https://images.unsplash.com/photo-1490750967868-88df5691cc41?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1490750967868-88df5691cc41?w=1920&q=95",
+    tags: [
+      "demon slayer",
+      "shinobu",
+      "kocho",
+      "insect hashira",
+      "butterfly",
+      "anime",
+    ],
+    isTrending: false,
+  },
+  {
+    id: 40047,
+    title: "Giyu Water Hashira",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1509233725247-49e657c54213?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1509233725247-49e657c54213?w=3840&q=95",
+    tags: [
+      "demon slayer",
+      "giyu",
+      "tomioka",
+      "water hashira",
+      "kimetsu",
+      "anime",
+    ],
+    isTrending: false,
+  },
+  {
+    id: 40048,
+    title: "Upper Moon Akaza",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1560343787-92a01e3f6e2c?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1560343787-92a01e3f6e2c?w=3840&q=95",
+    tags: ["demon slayer", "akaza", "upper moon", "twelve kizuki", "anime"],
+    isTrending: false,
+  },
+  {
+    id: 40049,
+    title: "Yoriichi Sun Breathing",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1605106702842-01a887a31122?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1605106702842-01a887a31122?w=3840&q=95",
+    tags: [
+      "demon slayer",
+      "yoriichi",
+      "tsugikuni",
+      "sun breathing",
+      "hinokami",
+      "anime",
+    ],
+    isTrending: true,
+  },
+
+  // ─── ATTACK ON TITAN (10) ─────────────────────────────────────
+  {
+    id: 40050,
+    title: "Eren Attack Titan",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=3840&q=95",
+    tags: ["attack on titan", "eren", "yeager", "attack titan", "aot", "anime"],
+    isTrending: true,
+  },
+  {
+    id: 40051,
+    title: "Mikasa Red Scarf",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "mobile",
+    imageUrl:
+      "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1920&q=95",
+    tags: [
+      "attack on titan",
+      "mikasa",
+      "ackerman",
+      "red scarf",
+      "aot",
+      "anime",
+    ],
+    isTrending: false,
+  },
+  {
+    id: 40052,
+    title: "Levi Ackerman Survey Corps",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=3840&q=95",
+    tags: [
+      "attack on titan",
+      "levi",
+      "ackerman",
+      "survey corps",
+      "captain",
+      "aot",
+      "anime",
+    ],
+    isTrending: true,
+  },
+  {
+    id: 40053,
+    title: "Armin Strategic Mind",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?w=1920&q=95",
+    tags: [
+      "attack on titan",
+      "armin",
+      "arlert",
+      "colossal titan",
+      "aot",
+      "anime",
+    ],
+    isTrending: false,
+  },
+  {
+    id: 40054,
+    title: "Reiner Armored Titan",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1607462109225-6b64ae2dd3cb?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1607462109225-6b64ae2dd3cb?w=3840&q=95",
+    tags: [
+      "attack on titan",
+      "reiner",
+      "braun",
+      "armored titan",
+      "warrior",
+      "aot",
+      "anime",
+    ],
+    isTrending: false,
+  },
+  {
+    id: 40055,
+    title: "Zeke Beast Titan",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=1920&q=95",
+    tags: [
+      "attack on titan",
+      "zeke",
+      "yeager",
+      "beast titan",
+      "warrior",
+      "aot",
+      "anime",
+    ],
+    isTrending: false,
+  },
+  {
+    id: 40056,
+    title: "Historia Queen",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "mobile",
+    imageUrl:
+      "https://images.unsplash.com/photo-1614850715649-1d0106293bd1?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1614850715649-1d0106293bd1?w=1920&q=95",
+    tags: [
+      "attack on titan",
+      "historia",
+      "reiss",
+      "queen",
+      "ymir",
+      "aot",
+      "anime",
+    ],
+    isTrending: false,
+  },
+  {
+    id: 40057,
+    title: "Wall Maria Breach",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=3840&q=95",
+    tags: [
+      "attack on titan",
+      "wall maria",
+      "colossal titan",
+      "breach",
+      "aot",
+      "anime",
+    ],
+    isTrending: true,
+  },
+  {
+    id: 40058,
+    title: "The Rumbling",
+    category: "Anime",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1601850494422-3cf14624b0b3?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1601850494422-3cf14624b0b3?w=3840&q=95",
+    tags: [
+      "attack on titan",
+      "rumbling",
+      "founding titan",
+      "eren",
+      "wall titans",
+      "aot",
+      "anime",
+    ],
+    isTrending: true,
+  },
+  {
+    id: 40059,
+    title: "Survey Corps Wings",
+    category: "Anime",
+    resolution: "HD",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1509233725247-49e657c54213?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1509233725247-49e657c54213?w=1920&q=95",
+    tags: [
+      "attack on titan",
+      "survey corps",
+      "wings of freedom",
+      "ODM gear",
+      "aot",
+      "anime",
+    ],
+    isTrending: false,
+  },
 ];
 
 export const CATEGORIES: Category[] = [
@@ -6627,8 +7499,15 @@ export const CATEGORIES: Category[] = [
     name: "Movies",
     color: "from-red-900/80 to-yellow-950/80",
     accentColor: "#dc2626",
-    coverWallpaperId: 10000,
+    coverWallpaperId: 20000,
     description: "Blockbuster cinema in HD & 4K",
+  },
+  {
+    name: "Cricket",
+    color: "from-green-900/80 to-lime-950/80",
+    accentColor: "#16a34a",
+    coverWallpaperId: 30000,
+    description: "Cricket action, IPL & world cricket",
   },
 ];
 
@@ -6640,15 +7519,165 @@ export function getTrendingWallpapers(): Wallpaper[] {
   return WALLPAPERS.filter((w) => w.isTrending);
 }
 
+// ─── Search Utilities ─────────────────────────────────────────
+
+/** Normalize: lowercase + collapse hyphens, underscores, ampersands, extra whitespace */
+function normalizeStr(s: string): string {
+  return s.toLowerCase().replace(/[-_&]/g, " ").replace(/\s+/g, " ").trim();
+}
+
+/** Synonym map so "spiderman" finds "spider-man" wallpapers and vice-versa */
+const SEARCH_SYNONYMS: Record<string, string[]> = {
+  spiderman: ["spider-man", "spider man", "spidey"],
+  "spider man": ["spider-man", "spiderman"],
+  spidey: ["spider-man", "spiderman"],
+  batman: ["dark knight", "gotham", "bruce wayne"],
+  "dark knight": ["batman"],
+  avengers: ["marvel", "mcu", "superhero"],
+  ironman: ["iron man", "tony stark"],
+  "iron man": ["ironman", "tony stark"],
+  "one piece": ["onepiece", "luffy", "straw hat"],
+  onepiece: ["one piece", "luffy"],
+  luffy: ["one piece"],
+  bleach: ["ichigo", "soul society", "shinigami"],
+  dragonball: ["dragon ball", "goku", "saiyan"],
+  "dragon ball": ["dragonball", "goku"],
+  demonslayer: ["demon slayer", "kimetsu", "tanjiro"],
+  "demon slayer": ["demonslayer", "kimetsu", "tanjiro"],
+  kimetsu: ["demon slayer"],
+  attackontitan: ["attack on titan", "aot", "eren"],
+  "attack on titan": ["aot", "eren", "titan"],
+  aot: ["attack on titan"],
+  jjk: ["jujutsu kaisen", "jujutsu"],
+  jujutsu: ["jujutsu kaisen", "jjk"],
+  "jujutsu kaisen": ["jjk", "jujutsu"],
+  mha: ["my hero academia", "bnha", "deku"],
+  bnha: ["my hero academia", "mha"],
+  "my hero academia": ["mha", "bnha", "deku"],
+  csmm: ["chainsaw man"],
+  chainsawman: ["chainsaw man"],
+  "chainsaw man": ["chainsawman"],
+  starwars: ["star wars", "jedi", "sith"],
+  "star wars": ["starwars", "jedi", "sith"],
+  johnwick: ["john wick", "baba yaga"],
+  "john wick": ["johnwick", "baba yaga"],
+  fastfurious: ["fast furious", "fast and furious"],
+  "fast furious": ["fastfurious", "fast and furious"],
+  "fast and furious": ["fast furious", "fastfurious"],
+  naruto: ["ninja", "shinobi", "jutsu"],
+  anime: ["manga", "shonen", "shojo"],
+  movie: ["movies", "film", "cinema"],
+  movies: ["movie", "film", "cinema"],
+  film: ["movie", "movies", "cinema"],
+  "4k": ["4k", "ultra hd", "uhd"],
+  hd: ["1080p", "high definition"],
+};
+
 export function searchWallpapers(query: string): Wallpaper[] {
-  const q = query.toLowerCase().trim();
-  if (!q) return WALLPAPERS;
-  return WALLPAPERS.filter(
-    (w) =>
-      w.title.toLowerCase().includes(q) ||
-      w.category.toLowerCase().includes(q) ||
-      w.tags.some((t) => t.toLowerCase().includes(q)) ||
-      w.resolution.toLowerCase().includes(q) ||
-      w.deviceType.toLowerCase().includes(q),
-  );
+  const raw = query.toLowerCase().trim();
+  if (!raw) return WALLPAPERS;
+
+  const q = normalizeStr(raw);
+
+  // Build a set of all terms to match against (original + synonyms)
+  const terms = new Set<string>([q, raw]);
+  const synonyms = SEARCH_SYNONYMS[q] ?? SEARCH_SYNONYMS[raw] ?? [];
+  for (const syn of synonyms) {
+    terms.add(syn);
+    terms.add(normalizeStr(syn));
+  }
+
+  const termArr = Array.from(terms);
+
+  return WALLPAPERS.filter((w) => {
+    const titleNorm = normalizeStr(w.title);
+    const catNorm = normalizeStr(w.category);
+    const resNorm = w.resolution.toLowerCase();
+    const tagsNorm = w.tags.map((t) => normalizeStr(t));
+    const tagsStr = tagsNorm.join(" ");
+
+    return termArr.some(
+      (term) =>
+        titleNorm.includes(term) ||
+        catNorm.includes(term) ||
+        resNorm.includes(term) ||
+        tagsStr.includes(term) ||
+        tagsNorm.some((t) => t.includes(term)),
+    );
+  });
+}
+
+// ─── Auto-generate Wallpapers For Unknown Keywords ────────────────
+
+/** Unsplash image pools used for keyword-based generation */
+const KEYWORD_IMAGE_MAP: Record<string, string[]> = {
+  default: [
+    "photo-1578632767115-351597cf2477",
+    "photo-1568702846914-96b305d2aaeb",
+    "photo-1490750967868-88df5691cc41",
+    "photo-1502082553048-f009c37129b9",
+    "photo-1540959733332-eab4deabeeaf",
+    "photo-1560343787-92a01e3f6e2c",
+  ],
+  anime: [
+    "photo-1578632767115-351597cf2477",
+    "photo-1568702846914-96b305d2aaeb",
+    "photo-1490750967868-88df5691cc41",
+    "photo-1502082553048-f009c37129b9",
+    "photo-1540959733332-eab4deabeeaf",
+    "photo-1517841905240-472988babdf9",
+  ],
+  nature: [
+    "photo-1501854140801-50d01698950b",
+    "photo-1441974231531-c6227db76b6e",
+    "photo-1518495973542-4542c06a5843",
+    "photo-1465146344425-f00d5f5c8f07",
+    "photo-1504173010664-32509aeebb62",
+    "photo-1462275646964-a0e3386b89fa",
+  ],
+  space: [
+    "photo-1446776653964-20c1d3a81b06",
+    "photo-1419242902214-272b3f66ee7a",
+    "photo-1462275646964-a0e3386b89fa",
+    "photo-1506318137071-a8e063b4bec0",
+    "photo-1454789548928-9efd52dc4031",
+    "photo-1484600899469-230e8d1d59c0",
+  ],
+};
+
+function getImagesForKeyword(keyword: string): string[] {
+  const k = keyword.toLowerCase();
+  if (k.includes("nature") || k.includes("forest") || k.includes("ocean"))
+    return KEYWORD_IMAGE_MAP.nature;
+  if (k.includes("space") || k.includes("galaxy") || k.includes("star"))
+    return KEYWORD_IMAGE_MAP.space;
+  if (k.includes("anime") || k.includes("naruto") || k.includes("manga"))
+    return KEYWORD_IMAGE_MAP.anime;
+  return KEYWORD_IMAGE_MAP.default;
+}
+
+export function generateWallpapersForKeyword(keyword: string): Wallpaper[] {
+  const imgs = getImagesForKeyword(keyword);
+  const capitalizedKeyword = keyword.charAt(0).toUpperCase() + keyword.slice(1);
+  const resolutions: Array<"HD" | "4K"> = ["4K", "HD", "4K", "HD", "4K", "HD"];
+  const devices: Array<"desktop" | "mobile"> = [
+    "desktop",
+    "mobile",
+    "desktop",
+    "mobile",
+    "desktop",
+    "mobile",
+  ];
+
+  return imgs.map((img, i) => ({
+    id: 900000 + i + keyword.charCodeAt(0) * 1000,
+    title: `${capitalizedKeyword} Wallpaper ${i + 1}`,
+    category: "Anime" as const,
+    resolution: resolutions[i],
+    deviceType: devices[i],
+    imageUrl: `https://images.unsplash.com/${img}?w=800&q=80`,
+    fullUrl: `https://images.unsplash.com/${img}?w=3840&q=95`,
+    tags: [keyword.toLowerCase(), "generated", "4k", "hd", "wallpaper"],
+    isTrending: false,
+  }));
 }
