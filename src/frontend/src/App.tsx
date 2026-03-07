@@ -661,6 +661,14 @@ function SearchPage({
   onDownload,
   getDownloadCount,
 }: SearchPageProps) {
+  // Determine whether Jikan is active (loading or has results)
+  const jikanActive = jikanLoading || jikanResults.length > 0 || !!jikanError;
+  // Total count shown in header
+  const totalCount =
+    jikanResults.length > 0
+      ? jikanResults.length + results.length
+      : results.length;
+
   return (
     <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20">
       {/* Search header */}
@@ -693,10 +701,66 @@ function SearchPage({
             <span className="text-gradient-violet">&ldquo;{query}&rdquo;</span>
           </h2>
           <span className="text-muted-foreground text-sm">
-            ({results.length} found)
+            ({totalCount} found)
           </span>
         </div>
       </div>
+
+      {/* ── PRIORITY: MyAnimeList / Jikan live results shown FIRST ─── */}
+      {jikanActive && (
+        <section className="mb-10" aria-label="Anime search results">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="flex items-center gap-2">
+              <span className="text-xl">⛩️</span>
+              <h2 className="text-foreground font-bold text-xl font-heading tracking-tight">
+                Anime Results
+              </h2>
+            </div>
+            <span className="px-2 py-0.5 rounded-full bg-muted text-muted-foreground text-xs font-medium border border-border">
+              Live
+            </span>
+            {jikanLoading && (
+              <span
+                data-ocid="search.loading_state"
+                className="text-xs text-muted-foreground animate-pulse"
+              >
+                Fetching…
+              </span>
+            )}
+          </div>
+
+          {jikanError && (
+            <div
+              data-ocid="search.error_state"
+              className="px-4 py-3 rounded-xl bg-destructive/10 border border-destructive/20 text-sm text-destructive"
+            >
+              {jikanError}
+            </div>
+          )}
+
+          {/* Skeleton loading grid — shown as primary loading state */}
+          {jikanLoading && jikanResults.length === 0 && (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 sm:gap-4">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div
+                  // biome-ignore lint/suspicious/noArrayIndexKey: skeleton placeholders
+                  key={i}
+                  className="aspect-[3/4] rounded-xl bg-muted animate-pulse"
+                />
+              ))}
+            </div>
+          )}
+
+          {jikanResults.length > 0 && (
+            <WallpaperGrid
+              wallpapers={jikanResults}
+              onWallpaperClick={onWallpaperClick}
+              onDownload={onDownload}
+              getDownloadCount={getDownloadCount}
+            />
+          )}
+        </section>
+      )}
 
       {/* Generated results notice banner */}
       {isGenerated && results.length > 0 && (
@@ -727,9 +791,22 @@ function SearchPage({
         </div>
       )}
 
-      {/* Results grid */}
+      {/* Local results — shown below Jikan results as "More Wallpapers" */}
       {results.length > 0 ? (
         <div data-ocid="search.results_section">
+          {jikanResults.length > 0 && (
+            <div className="flex items-center gap-3 mb-5">
+              <div className="flex items-center gap-2">
+                <span className="text-xl">🖼️</span>
+                <h2 className="text-foreground font-bold text-xl font-heading tracking-tight">
+                  More Wallpapers
+                </h2>
+              </div>
+              <span className="px-2 py-0.5 rounded-full bg-muted text-muted-foreground text-xs font-medium border border-border">
+                {results.length}
+              </span>
+            </div>
+          )}
           <WallpaperGrid
             wallpapers={results}
             onWallpaperClick={onWallpaperClick}
@@ -738,69 +815,16 @@ function SearchPage({
           />
         </div>
       ) : (
-        <div
-          data-ocid="search.empty_state"
-          className="flex flex-col items-center justify-center py-16 text-muted-foreground gap-3"
-        >
-          <Search className="w-10 h-10 opacity-30" />
-          <p className="text-lg font-medium">No wallpapers found</p>
-          <p className="text-sm opacity-70">Try a different search term</p>
-        </div>
-      )}
-
-      {/* ── MyAnimeList / Jikan live results ─────────────────── */}
-      {(jikanLoading || jikanResults.length > 0 || jikanError) && (
-        <section className="mt-12" aria-label="MyAnimeList search results">
-          <div className="flex items-center gap-3 mb-5">
-            <div className="flex items-center gap-2">
-              <span className="text-xl">⛩️</span>
-              <h2 className="text-foreground font-bold text-xl font-heading tracking-tight">
-                From MyAnimeList
-              </h2>
-            </div>
-            <span className="px-2 py-0.5 rounded-full bg-muted text-muted-foreground text-xs font-medium border border-border">
-              Live
-            </span>
-            {jikanLoading && (
-              <span
-                data-ocid="search.loading_state"
-                className="text-xs text-muted-foreground animate-pulse"
-              >
-                Fetching…
-              </span>
-            )}
+        !jikanActive && (
+          <div
+            data-ocid="search.empty_state"
+            className="flex flex-col items-center justify-center py-16 text-muted-foreground gap-3"
+          >
+            <Search className="w-10 h-10 opacity-30" />
+            <p className="text-lg font-medium">No wallpapers found</p>
+            <p className="text-sm opacity-70">Try a different search term</p>
           </div>
-
-          {jikanError && (
-            <div
-              data-ocid="search.error_state"
-              className="px-4 py-3 rounded-xl bg-destructive/10 border border-destructive/20 text-sm text-destructive"
-            >
-              {jikanError}
-            </div>
-          )}
-
-          {jikanLoading && jikanResults.length === 0 && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 sm:gap-4">
-              {Array.from({ length: 12 }).map((_, i) => (
-                <div
-                  // biome-ignore lint/suspicious/noArrayIndexKey: skeleton placeholders
-                  key={i}
-                  className="aspect-[3/4] rounded-xl bg-muted animate-pulse"
-                />
-              ))}
-            </div>
-          )}
-
-          {jikanResults.length > 0 && (
-            <WallpaperGrid
-              wallpapers={jikanResults}
-              onWallpaperClick={onWallpaperClick}
-              onDownload={onDownload}
-              getDownloadCount={getDownloadCount}
-            />
-          )}
-        </section>
+        )
       )}
     </div>
   );
