@@ -1,6 +1,15 @@
 import { cn } from "@/lib/utils";
 import { Layers } from "lucide-react";
+import { motion } from "motion/react";
 import { SearchBar } from "./SearchBar";
+
+const HEADER_CATEGORIES = [
+  "Anime",
+  "Nature",
+  "Cars",
+  "Gaming",
+  "AMOLED",
+] as const;
 
 interface HeaderProps {
   searchQuery: string;
@@ -8,6 +17,8 @@ interface HeaderProps {
   onSearch: (query: string) => void;
   onLogoClick: () => void;
   isScrolled?: boolean;
+  selectedCategory: string;
+  onCategoryClick: (name: string) => void;
 }
 
 export function Header({
@@ -16,6 +27,8 @@ export function Header({
   onSearch,
   onLogoClick,
   isScrolled,
+  selectedCategory,
+  onCategoryClick,
 }: HeaderProps) {
   return (
     <header
@@ -28,6 +41,7 @@ export function Header({
       )}
     >
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Row 1: Logo + Search */}
         <div className="flex items-center gap-4 h-16">
           {/* Logo */}
           <button
@@ -54,6 +68,50 @@ export function Header({
             className="flex-1 min-w-0 max-w-2xl"
           />
         </div>
+
+        {/* Row 2: Category filter pills */}
+        <motion.div
+          className="pb-2.5 overflow-x-auto scrollbar-none"
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+        >
+          <div className="flex items-center gap-2 w-max">
+            {/* All button */}
+            <button
+              type="button"
+              data-ocid="category.all.tab"
+              onClick={() => onCategoryClick("")}
+              className={cn(
+                "flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
+                selectedCategory === ""
+                  ? "bg-primary text-primary-foreground border-primary glow-violet"
+                  : "bg-muted/50 text-muted-foreground border-border hover:bg-muted hover:text-foreground hover:border-border/80",
+              )}
+              aria-pressed={selectedCategory === ""}
+            >
+              All
+            </button>
+
+            {HEADER_CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                data-ocid={`category.${cat.toLowerCase()}.tab`}
+                onClick={() => onCategoryClick(cat)}
+                className={cn(
+                  "flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
+                  selectedCategory === cat
+                    ? "bg-primary text-primary-foreground border-primary glow-violet"
+                    : "bg-muted/50 text-muted-foreground border-border hover:bg-muted hover:text-foreground hover:border-border/80",
+                )}
+                aria-pressed={selectedCategory === cat}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </header>
   );

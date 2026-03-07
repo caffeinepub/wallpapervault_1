@@ -70,16 +70,23 @@ export default function App() {
     setLiveSearchQuery(value);
   }, []);
 
-  const handleCategoryClick = useCallback((name: string) => {
-    setSelectedCategory(name);
-    setView("category");
-  }, []);
-
   const handleGoHome = useCallback(() => {
     setView("home");
     setSearchQuery("");
     setLiveSearchQuery("");
     setSelectedCategory("");
+  }, []);
+
+  const handleCategoryClick = useCallback((name: string) => {
+    if (name === "") {
+      setView("home");
+      setSearchQuery("");
+      setLiveSearchQuery("");
+      setSelectedCategory("");
+    } else {
+      setSelectedCategory(name);
+      setView("category");
+    }
   }, []);
 
   const handleWallpaperClick = useCallback((wallpaper: Wallpaper) => {
@@ -133,6 +140,8 @@ export default function App() {
         onSearch={handleSearch}
         onLogoClick={handleGoHome}
         isScrolled={isScrolled}
+        selectedCategory={view === "category" ? selectedCategory : ""}
+        onCategoryClick={handleCategoryClick}
       />
 
       {/* Main content */}
@@ -317,7 +326,7 @@ function HomePage({
             title="Popular Categories"
             count={CATEGORIES.length}
           />
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4">
             {CATEGORIES.map((category, i) => (
               <motion.div
                 key={category.name}
@@ -380,6 +389,8 @@ function CategoryPage({
     Cars: "🏎️",
     Gaming: "🎮",
     AMOLED: "🌑",
+    Space: "🚀",
+    Minimal: "◻️",
   };
 
   return (
