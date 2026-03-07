@@ -49,7 +49,14 @@ export const idlService = IDL.Service({
   '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
   'addCategory' : IDL.Func([IDL.Text], [], []),
   'categoryExists' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
+  'getAllDownloadCounts' : IDL.Func(
+      [],
+      [IDL.Vec(IDL.Tuple(IDL.Int, IDL.Nat))],
+      ['query'],
+    ),
   'getCategories' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
+  'getDownloadCount' : IDL.Func([IDL.Int], [IDL.Nat], ['query']),
+  'incrementDownloadCount' : IDL.Func([IDL.Int], [IDL.Nat], []),
 });
 
 export const idlInitArgs = [];
@@ -96,7 +103,14 @@ export const idlFactory = ({ IDL }) => {
     '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
     'addCategory' : IDL.Func([IDL.Text], [], []),
     'categoryExists' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
+    'getAllDownloadCounts' : IDL.Func(
+        [],
+        [IDL.Vec(IDL.Tuple(IDL.Int, IDL.Nat))],
+        ['query'],
+      ),
     'getCategories' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
+    'getDownloadCount' : IDL.Func([IDL.Int], [IDL.Nat], ['query']),
+    'incrementDownloadCount' : IDL.Func([IDL.Int], [IDL.Nat], []),
   });
 };
 

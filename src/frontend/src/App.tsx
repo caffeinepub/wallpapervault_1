@@ -16,6 +16,12 @@ import { Lightbox } from "@/components/Lightbox";
 import { SearchBar } from "@/components/SearchBar";
 import { WallpaperCard } from "@/components/WallpaperCard";
 import { WallpaperGrid } from "@/components/WallpaperGrid";
+import { WallpaperPreviewPage } from "@/components/WallpaperPreviewPage";
+import { AboutUsPage } from "@/components/pages/AboutUsPage";
+import { ContactPage } from "@/components/pages/ContactPage";
+import { PrivacyPolicyPage } from "@/components/pages/PrivacyPolicyPage";
+import { TermsOfServicePage } from "@/components/pages/TermsOfServicePage";
+import { useDownloadCounts } from "@/hooks/useDownloadCounts";
 
 import {
   CATEGORIES,
@@ -26,12 +32,21 @@ import {
   searchWallpapers,
 } from "@/data/wallpapers";
 
-type View = "home" | "category" | "search";
+type View =
+  | "home"
+  | "category"
+  | "search"
+  | "preview"
+  | "privacy"
+  | "about"
+  | "contact"
+  | "terms";
 
 const TRENDING = getTrendingWallpapers();
 
 export default function App() {
   const [view, setView] = useState<View>("home");
+  const [previousView, setPreviousView] = useState<View>("home");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const [liveSearchQuery, setLiveSearchQuery] = useState("");
@@ -40,6 +55,8 @@ export default function App() {
   );
   const [isScrolled, setIsScrolled] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
+
+  const { getCount, increment } = useDownloadCounts();
 
   // Scroll detection for header
   useEffect(() => {
@@ -75,6 +92,7 @@ export default function App() {
     setSearchQuery("");
     setLiveSearchQuery("");
     setSelectedCategory("");
+    setSelectedWallpaper(null);
   }, []);
 
   const handleCategoryClick = useCallback((name: string) => {
@@ -83,14 +101,39 @@ export default function App() {
       setSearchQuery("");
       setLiveSearchQuery("");
       setSelectedCategory("");
+      setSelectedWallpaper(null);
     } else {
       setSelectedCategory(name);
       setView("category");
+      setSelectedWallpaper(null);
     }
   }, []);
 
-  const handleWallpaperClick = useCallback((wallpaper: Wallpaper) => {
-    setSelectedWallpaper(wallpaper);
+  const handleWallpaperClick = useCallback(
+    (wallpaper: Wallpaper) => {
+      setPreviousView(view);
+      setSelectedWallpaper(wallpaper);
+      setView("preview");
+    },
+    [view],
+  );
+
+  const handleBackFromPreview = useCallback(() => {
+    setView(previousView);
+    setSelectedWallpaper(null);
+  }, [previousView]);
+
+  const handleFooterNav = useCallback(
+    (page: "privacy" | "about" | "contact" | "terms") => {
+      setView(page);
+      setSelectedWallpaper(null);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    [],
+  );
+
+  const handleBackFromFooterPage = useCallback(() => {
+    setView("home");
   }, []);
 
   const handleCloseLightbox = useCallback(() => {
@@ -119,8 +162,10 @@ export default function App() {
         window.open(wallpaper.fullUrl, "_blank");
         toast.info(`Opening ${wallpaper.title} in new tab`);
       }
+      // Increment download counter (optimistic + backend)
+      increment(wallpaper.id);
     },
-    [],
+    [increment],
   );
 
   const searchResults = view === "search" ? searchWallpapers(searchQuery) : [];
@@ -133,16 +178,18 @@ export default function App() {
     <div className="min-h-screen bg-background text-foreground">
       <Toaster position="bottom-right" />
 
-      {/* Header */}
-      <Header
-        searchQuery={currentSearchValue}
-        onSearchChange={handleSearchChange}
-        onSearch={handleSearch}
-        onLogoClick={handleGoHome}
-        isScrolled={isScrolled}
-        selectedCategory={view === "category" ? selectedCategory : ""}
-        onCategoryClick={handleCategoryClick}
-      />
+      {/* Header — hidden on preview page (preview has its own top bar) */}
+      {view !== "preview" && (
+        <Header
+          searchQuery={currentSearchValue}
+          onSearchChange={handleSearchChange}
+          onSearch={handleSearch}
+          onLogoClick={handleGoHome}
+          isScrolled={isScrolled}
+          selectedCategory={view === "category" ? selectedCategory : ""}
+          onCategoryClick={handleCategoryClick}
+        />
+      )}
 
       {/* Main content */}
       <main ref={mainRef}>
@@ -159,6 +206,7 @@ export default function App() {
                 onCategoryClick={handleCategoryClick}
                 onWallpaperClick={handleWallpaperClick}
                 onDownload={handleDownload}
+                getDownloadCount={getCount}
               />
             </motion.div>
           )}
@@ -177,6 +225,7 @@ export default function App() {
                 onBack={handleGoHome}
                 onWallpaperClick={handleWallpaperClick}
                 onDownload={handleDownload}
+                getDownloadCount={getCount}
               />
             </motion.div>
           )}
@@ -197,47 +246,152 @@ export default function App() {
                 onSearch={handleSearch}
                 onWallpaperClick={handleWallpaperClick}
                 onDownload={handleDownload}
+                getDownloadCount={getCount}
               />
+            </motion.div>
+          )}
+
+          {view === "preview" && selectedWallpaper && (
+            <motion.div
+              key="preview"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 12 }}
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <WallpaperPreviewPage
+                wallpaper={selectedWallpaper}
+                onBack={handleBackFromPreview}
+                onDownload={handleDownload}
+                downloadCount={getCount(selectedWallpaper.id)}
+              />
+            </motion.div>
+          )}
+
+          {view === "privacy" && (
+            <motion.div
+              key="privacy"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.22 }}
+            >
+              <PrivacyPolicyPage onBack={handleBackFromFooterPage} />
+            </motion.div>
+          )}
+
+          {view === "about" && (
+            <motion.div
+              key="about"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.22 }}
+            >
+              <AboutUsPage onBack={handleBackFromFooterPage} />
+            </motion.div>
+          )}
+
+          {view === "contact" && (
+            <motion.div
+              key="contact"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.22 }}
+            >
+              <ContactPage onBack={handleBackFromFooterPage} />
+            </motion.div>
+          )}
+
+          {view === "terms" && (
+            <motion.div
+              key="terms"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.22 }}
+            >
+              <TermsOfServicePage onBack={handleBackFromFooterPage} />
             </motion.div>
           )}
         </AnimatePresence>
       </main>
 
-      {/* Footer */}
-      <footer className="mt-20 border-t border-border bg-card/50">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-md bg-primary/20 border border-primary/30 flex items-center justify-center">
-                <Layers className="w-3 h-3 text-primary" />
-              </div>
-              <span className="font-heading font-black text-sm">
-                <span className="text-gradient-violet">Wallpaper</span>
-                <span className="text-foreground">Vault</span>
-              </span>
-            </div>
-            <p className="text-muted-foreground text-sm text-center">
-              © {new Date().getFullYear()}. Built with{" "}
-              <span className="text-red-400">♥</span> using{" "}
-              <a
-                href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(window.location.hostname)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:text-primary/80 transition-colors"
+      {/* Footer — hidden on preview page */}
+      {view !== "preview" && (
+        <footer className="mt-20 border-t border-border bg-card/50">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {/* Footer nav links */}
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-6">
+              <button
+                type="button"
+                data-ocid="footer.privacy_link"
+                onClick={() => handleFooterNav("privacy")}
+                className="text-muted-foreground hover:text-foreground text-sm transition-colors"
               >
-                caffeine.ai
-              </a>
-            </p>
-            <div className="text-muted-foreground text-xs">
-              {WALLPAPERS.length} wallpapers · {CATEGORIES.length} categories
+                Privacy Policy
+              </button>
+              <button
+                type="button"
+                data-ocid="footer.about_link"
+                onClick={() => handleFooterNav("about")}
+                className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+              >
+                About Us
+              </button>
+              <button
+                type="button"
+                data-ocid="footer.contact_link"
+                onClick={() => handleFooterNav("contact")}
+                className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+              >
+                Contact
+              </button>
+              <button
+                type="button"
+                data-ocid="footer.terms_link"
+                onClick={() => handleFooterNav("terms")}
+                className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+              >
+                Terms of Service
+              </button>
+            </div>
+
+            {/* Bottom row */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-md bg-primary/20 border border-primary/30 flex items-center justify-center">
+                  <Layers className="w-3 h-3 text-primary" />
+                </div>
+                <span className="font-heading font-black text-sm">
+                  <span className="text-gradient-violet">Wallpaper</span>
+                  <span className="text-foreground">Vault</span>
+                </span>
+              </div>
+              <p className="text-muted-foreground text-sm text-center">
+                © {new Date().getFullYear()}. Built with{" "}
+                <span className="text-red-400">♥</span> using{" "}
+                <a
+                  href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(window.location.hostname)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:text-primary/80 transition-colors"
+                >
+                  caffeine.ai
+                </a>
+              </p>
+              <div className="text-muted-foreground text-xs">
+                {WALLPAPERS.length} wallpapers · {CATEGORIES.length} categories
+              </div>
             </div>
           </div>
-        </div>
-      </footer>
+        </footer>
+      )}
 
-      {/* Lightbox */}
+      {/* Lightbox — only shown when not in preview view */}
       <Lightbox
-        wallpaper={selectedWallpaper}
+        wallpaper={view !== "preview" ? selectedWallpaper : null}
         onClose={handleCloseLightbox}
         onDownload={handleDownload}
       />
@@ -250,12 +404,14 @@ interface HomePageProps {
   onCategoryClick: (name: string) => void;
   onWallpaperClick: (w: Wallpaper) => void;
   onDownload: (w: Wallpaper, e: React.MouseEvent) => void;
+  getDownloadCount: (id: number) => number;
 }
 
 function HomePage({
   onCategoryClick,
   onWallpaperClick,
   onDownload,
+  getDownloadCount,
 }: HomePageProps) {
   return (
     <div className="pb-20">
@@ -314,6 +470,7 @@ function HomePage({
                 index={i}
                 onClick={onWallpaperClick}
                 onDownload={onDownload}
+                downloadCount={getDownloadCount(wallpaper.id)}
               />
             ))}
           </div>
@@ -355,6 +512,7 @@ function HomePage({
             wallpapers={WALLPAPERS}
             onWallpaperClick={onWallpaperClick}
             onDownload={onDownload}
+            getDownloadCount={getDownloadCount}
           />
         </section>
       </div>
@@ -369,6 +527,7 @@ interface CategoryPageProps {
   onBack: () => void;
   onWallpaperClick: (w: Wallpaper) => void;
   onDownload: (w: Wallpaper, e: React.MouseEvent) => void;
+  getDownloadCount: (id: number) => number;
 }
 
 function CategoryPage({
@@ -377,6 +536,7 @@ function CategoryPage({
   onBack,
   onWallpaperClick,
   onDownload,
+  getDownloadCount,
 }: CategoryPageProps) {
   const catData = CATEGORIES.find((c) => c.name === category);
   const coverWallpaper = catData
@@ -391,6 +551,7 @@ function CategoryPage({
     AMOLED: "🌑",
     Space: "🚀",
     Minimal: "◻️",
+    Movies: "🎬",
   };
 
   return (
@@ -438,6 +599,7 @@ function CategoryPage({
         wallpapers={wallpapers}
         onWallpaperClick={onWallpaperClick}
         onDownload={onDownload}
+        getDownloadCount={getDownloadCount}
       />
     </div>
   );
@@ -452,6 +614,7 @@ interface SearchPageProps {
   onSearch: (query: string) => void;
   onWallpaperClick: (w: Wallpaper) => void;
   onDownload: (w: Wallpaper, e: React.MouseEvent) => void;
+  getDownloadCount: (id: number) => number;
 }
 
 function SearchPage({
@@ -462,6 +625,7 @@ function SearchPage({
   onSearch,
   onWallpaperClick,
   onDownload,
+  getDownloadCount,
 }: SearchPageProps) {
   return (
     <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20">
@@ -504,6 +668,7 @@ function SearchPage({
         wallpapers={results}
         onWallpaperClick={onWallpaperClick}
         onDownload={onDownload}
+        getDownloadCount={getDownloadCount}
       />
     </div>
   );

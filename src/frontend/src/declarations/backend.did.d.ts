@@ -39,7 +39,10 @@ export interface _SERVICE {
   '_caffeineStorageUpdateGatewayPrincipals' : ActorMethod<[], undefined>,
   'addCategory' : ActorMethod<[string], undefined>,
   'categoryExists' : ActorMethod<[string], boolean>,
+  'getAllDownloadCounts' : ActorMethod<[], Array<[bigint, bigint]>>,
   'getCategories' : ActorMethod<[], Array<string>>,
+  'getDownloadCount' : ActorMethod<[bigint], bigint>,
+  'incrementDownloadCount' : ActorMethod<[bigint], bigint>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

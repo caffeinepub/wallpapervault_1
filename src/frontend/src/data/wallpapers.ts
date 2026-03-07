@@ -1,3 +1,6 @@
+import { ANIME_SERIES_WALLPAPERS } from "./animeWallpapers";
+import { MOVIE_WALLPAPERS } from "./movieWallpapers";
+
 export type Wallpaper = {
   id: number;
   title: string;
@@ -8,8 +11,9 @@ export type Wallpaper = {
     | "Gaming"
     | "AMOLED"
     | "Space"
-    | "Minimal";
-  resolution: "HD" | "4K";
+    | "Minimal"
+    | "Movies";
+  resolution: "HD" | "2K" | "4K";
   deviceType: "desktop" | "mobile";
   imageUrl: string;
   fullUrl: string;
@@ -6565,6 +6569,8 @@ export const WALLPAPERS: Wallpaper[] = [
     tags: ["minimal", "soft", "peach", "warm"],
     isTrending: false,
   },
+  ...(ANIME_SERIES_WALLPAPERS as Wallpaper[]),
+  ...(MOVIE_WALLPAPERS as Wallpaper[]),
 ];
 
 export const CATEGORIES: Category[] = [
@@ -6616,6 +6622,13 @@ export const CATEGORIES: Category[] = [
     accentColor: "#9ca3af",
     coverWallpaperId: 1100,
     description: "Clean lines, quiet beauty",
+  },
+  {
+    name: "Movies",
+    color: "from-red-900/80 to-yellow-950/80",
+    accentColor: "#dc2626",
+    coverWallpaperId: 10000,
+    description: "Blockbuster cinema in HD & 4K",
   },
 ];
 

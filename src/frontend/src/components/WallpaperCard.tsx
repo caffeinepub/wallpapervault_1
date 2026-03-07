@@ -10,6 +10,13 @@ interface WallpaperCardProps {
   index: number;
   onClick: (wallpaper: Wallpaper) => void;
   onDownload: (wallpaper: Wallpaper, e: React.MouseEvent) => void;
+  downloadCount?: number;
+}
+
+function formatCount(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}m`;
+  if (n >= 1000) return `${(n / 1000).toFixed(1)}k`;
+  return String(n);
 }
 
 export function WallpaperCard({
@@ -17,6 +24,7 @@ export function WallpaperCard({
   index,
   onClick,
   onDownload,
+  downloadCount = 0,
 }: WallpaperCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -72,6 +80,15 @@ export function WallpaperCard({
 
       {/* Permanent soft vignette at bottom so badges are always readable */}
       <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+
+      {/* Download count badge — bottom left, always visible */}
+      <div
+        data-ocid={`wallpaper.download_count.${markerIndex}`}
+        className="absolute bottom-2 left-2 z-10 flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-black/55 text-white/80 backdrop-blur-sm pointer-events-none select-none"
+      >
+        <Download className="w-2.5 h-2.5 opacity-70" />
+        {formatCount(downloadCount)}
+      </div>
 
       {/* Trending badge — top left */}
       {wallpaper.isTrending && (

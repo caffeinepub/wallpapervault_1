@@ -6,6 +6,7 @@ interface WallpaperGridProps {
   onWallpaperClick: (wallpaper: Wallpaper) => void;
   onDownload: (wallpaper: Wallpaper, e: React.MouseEvent) => void;
   indexOffset?: number;
+  getDownloadCount?: (id: number) => number;
 }
 
 export function WallpaperGrid({
@@ -13,6 +14,7 @@ export function WallpaperGrid({
   onWallpaperClick,
   onDownload,
   indexOffset = 0,
+  getDownloadCount,
 }: WallpaperGridProps) {
   if (wallpapers.length === 0) {
     return (
@@ -62,6 +64,9 @@ export function WallpaperGrid({
             index={indexOffset + i}
             onClick={onWallpaperClick}
             onDownload={onDownload}
+            downloadCount={
+              getDownloadCount ? getDownloadCount(wallpaper.id) : 0
+            }
           />
         </div>
       ))}

@@ -109,7 +109,10 @@ export interface backendInterface {
     _caffeineStorageUpdateGatewayPrincipals(): Promise<void>;
     addCategory(name: string): Promise<void>;
     categoryExists(category: string): Promise<boolean>;
+    getAllDownloadCounts(): Promise<Array<[bigint, bigint]>>;
     getCategories(): Promise<Array<string>>;
+    getDownloadCount(id: bigint): Promise<bigint>;
+    incrementDownloadCount(id: bigint): Promise<bigint>;
 }
 import type { _CaffeineStorageRefillInformation as __CaffeineStorageRefillInformation, _CaffeineStorageRefillResult as __CaffeineStorageRefillResult } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
@@ -226,6 +229,20 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async getAllDownloadCounts(): Promise<Array<[bigint, bigint]>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getAllDownloadCounts();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getAllDownloadCounts();
+            return result;
+        }
+    }
     async getCategories(): Promise<Array<string>> {
         if (this.processError) {
             try {
@@ -237,6 +254,34 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.getCategories();
+            return result;
+        }
+    }
+    async getDownloadCount(arg0: bigint): Promise<bigint> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getDownloadCount(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getDownloadCount(arg0);
+            return result;
+        }
+    }
+    async incrementDownloadCount(arg0: bigint): Promise<bigint> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.incrementDownloadCount(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.incrementDownloadCount(arg0);
             return result;
         }
     }
