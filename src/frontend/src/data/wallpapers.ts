@@ -7526,6 +7526,318 @@ function normalizeStr(s: string): string {
   return s.toLowerCase().replace(/[-_&]/g, " ").replace(/\s+/g, " ").trim();
 }
 
+/** Keywords that clearly indicate an anime search — used to gate Jikan API calls */
+const ANIME_KEYWORDS = new Set([
+  "anime",
+  "manga",
+  "naruto",
+  "one piece",
+  "onepiece",
+  "bleach",
+  "dragon ball",
+  "dragonball",
+  "attack on titan",
+  "aot",
+  "attackontitan",
+  "demon slayer",
+  "demonslayer",
+  "kimetsu",
+  "jujutsu kaisen",
+  "jjk",
+  "jujutsu",
+  "my hero academia",
+  "mha",
+  "bnha",
+  "deku",
+  "bakugo",
+  "chainsaw man",
+  "chainsawman",
+  "tokyo revengers",
+  "tokyorevengers",
+  "black clover",
+  "fullmetal alchemist",
+  "fma",
+  "death note",
+  "deathnote",
+  "sword art online",
+  "sao",
+  "fairy tail",
+  "fairytail",
+  "hunter x hunter",
+  "hxh",
+  "code geass",
+  "codegeass",
+  "assassination classroom",
+  "re zero",
+  "rezero",
+  "overlord",
+  "spirited away",
+  "ghibli",
+  "one punch man",
+  "opm",
+  "mob psycho",
+  "dr stone",
+  "drstone",
+  "vinland saga",
+  "vinlandsaga",
+  "black clover",
+  "bleach",
+  "luffy",
+  "zoro",
+  "sanji",
+  "nami",
+  "chopper",
+  "robin",
+  "brook",
+  "naruto",
+  "sasuke",
+  "sakura",
+  "kakashi",
+  "itachi",
+  "madara",
+  "pain",
+  "jiraiya",
+  "minato",
+  "gaara",
+  "eren",
+  "mikasa",
+  "levi",
+  "armin",
+  "hange",
+  "erwin",
+  "reiner",
+  "annie",
+  "tanjiro",
+  "nezuko",
+  "zenitsu",
+  "inosuke",
+  "rengoku",
+  "giyu",
+  "shinobu",
+  "muzan",
+  "gojo",
+  "sukuna",
+  "yuji",
+  "megumi",
+  "nobara",
+  "nanami",
+  "ichigo",
+  "rukia",
+  "byakuya",
+  "aizen",
+  "hitsugaya",
+  "renji",
+  "orihime",
+  "goku",
+  "vegeta",
+  "gohan",
+  "piccolo",
+  "frieza",
+  "cell",
+  "beerus",
+  "deku",
+  "all might",
+  "bakugo",
+  "todoroki",
+  "uraraka",
+  "shonen",
+  "shojo",
+  "isekai",
+  "mecha",
+  "seinen",
+  "anime girl",
+  "anime boy",
+]);
+
+const MOVIE_KEYWORDS = new Set([
+  "movie",
+  "movies",
+  "film",
+  "cinema",
+  "hollywood",
+  "bollywood",
+  "south indian",
+  "tollywood",
+  "avengers",
+  "iron man",
+  "ironman",
+  "thor",
+  "captain america",
+  "black panther",
+  "doctor strange",
+  "deadpool",
+  "wolverine",
+  "hulk",
+  "scarlet witch",
+  "guardians of the galaxy",
+  "spider-man",
+  "spiderman",
+  "batman",
+  "superman",
+  "wonder woman",
+  "flash",
+  "aquaman",
+  "harley quinn",
+  "joker",
+  "dc",
+  "marvel",
+  "mcu",
+  "john wick",
+  "avatar",
+  "fast furious",
+  "fast and furious",
+  "transformers",
+  "star wars",
+  "shah rukh khan",
+  "srk",
+  "salman khan",
+  "aamir khan",
+  "hrithik roshan",
+  "ranveer singh",
+  "deepika padukone",
+  "allu arjun",
+  "pushpa",
+  "kgf",
+  "rrr",
+  "rajinikanth",
+  "vijay",
+  "prabhas",
+  "yash",
+  "ram charan",
+  "jr ntr",
+  "kamal haasan",
+  "rashmika",
+  "thala ajith",
+  "action",
+  "thriller",
+  "sci-fi",
+  "scifi",
+  "superhero",
+  "blockbuster",
+  "actor",
+  "actress",
+]);
+
+const CRICKET_KEYWORDS = new Set([
+  "cricket",
+  "ipl",
+  "t20",
+  "odi",
+  "test match",
+  "bcci",
+  "icc",
+  "dhoni",
+  "virat",
+  "virat kohli",
+  "rohit",
+  "rohit sharma",
+  "bumrah",
+  "jadeja",
+  "hardik",
+  "sachin",
+  "sachin tendulkar",
+  "sourav",
+  "sourav ganguly",
+  "yuvraj",
+  "ms dhoni",
+  "babar",
+  "babar azam",
+  "shaheen",
+  "rizwan",
+  "pakistan cricket",
+  "india cricket",
+  "csk",
+  "mi",
+  "rcb",
+  "kkr",
+  "pbks",
+  "srh",
+  "dc",
+  "gt",
+  "lsg",
+  "rr",
+  "chennai super kings",
+  "mumbai indians",
+  "royal challengers",
+  "kolkata knight riders",
+  "wicket",
+  "bat",
+  "bowl",
+  "six",
+  "four",
+  "century",
+  "stadium",
+  "pitch",
+  "umpire",
+  "fielding",
+  "world cup",
+  "cricket world cup",
+  "champions trophy",
+]);
+
+/**
+ * Short cricket keywords that should only match as whole words (not substrings of other words).
+ * e.g. "bat" should NOT match "batman", "dc" should NOT match "dcu"
+ */
+const CRICKET_WHOLE_WORD_KEYWORDS = new Set([
+  "bat",
+  "bowl",
+  "six",
+  "four",
+  "dc",
+  "mi",
+  "rr",
+  "gt",
+]);
+
+/** Check if a keyword matches query as a whole word (space-bounded or start/end of string) */
+function matchesWholeWord(query: string, keyword: string): boolean {
+  const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const re = new RegExp(`(?:^|\\s)${escaped}(?:\\s|$)`);
+  return re.test(query);
+}
+
+/**
+ * Detect the dominant category intent from a search query.
+ * Returns "Anime" | "Movies" | "Cricket" | null (null = general / no strong signal).
+ */
+export function detectSearchCategory(
+  query: string,
+): "Anime" | "Movies" | "Cricket" | null {
+  const q = query.toLowerCase().trim();
+  let animeScore = 0;
+  let movieScore = 0;
+  let cricketScore = 0;
+
+  for (const kw of ANIME_KEYWORDS) {
+    if (q.includes(kw)) animeScore++;
+  }
+  for (const kw of MOVIE_KEYWORDS) {
+    if (q.includes(kw)) movieScore++;
+  }
+  for (const kw of CRICKET_KEYWORDS) {
+    // Short ambiguous keywords must match as a whole word to avoid false positives
+    // e.g. "bat" should not match "batman", "dc" should not match "dcu"
+    if (CRICKET_WHOLE_WORD_KEYWORDS.has(kw)) {
+      if (matchesWholeWord(q, kw)) cricketScore++;
+    } else {
+      if (q.includes(kw)) cricketScore++;
+    }
+  }
+
+  const max = Math.max(animeScore, movieScore, cricketScore);
+  if (max === 0) return null;
+  // Priority order: Movies > Anime > Cricket to avoid ambiguous short-keyword false positives
+  if (movieScore === max) return "Movies";
+  if (animeScore === max) return "Anime";
+  return "Cricket";
+}
+
+/** Returns true only when a query is anime-related (used to gate Jikan API) */
+export function isAnimeQuery(query: string): boolean {
+  return detectSearchCategory(query) === "Anime";
+}
+
 /** Synonym map so "spiderman" finds "spider-man" wallpapers and vice-versa */
 const SEARCH_SYNONYMS: Record<string, string[]> = {
   spiderman: ["spider-man", "spider man", "spidey"],
@@ -7669,10 +7981,14 @@ export function generateWallpapersForKeyword(keyword: string): Wallpaper[] {
     "mobile",
   ];
 
+  // Detect the correct category so generated wallpapers go to the right section
+  const detectedCat = detectSearchCategory(keyword);
+  const category: Wallpaper["category"] = detectedCat ?? "Anime";
+
   return imgs.map((img, i) => ({
     id: 900000 + i + keyword.charCodeAt(0) * 1000,
     title: `${capitalizedKeyword} Wallpaper ${i + 1}`,
-    category: "Anime" as const,
+    category,
     resolution: resolutions[i],
     deviceType: devices[i],
     imageUrl: `https://images.unsplash.com/${img}?w=800&q=80`,

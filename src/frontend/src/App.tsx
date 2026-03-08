@@ -29,9 +29,11 @@ import {
   CATEGORIES,
   WALLPAPERS,
   type Wallpaper,
+  detectSearchCategory,
   generateWallpapersForKeyword,
   getTrendingWallpapers,
   getWallpapersByCategory,
+  isAnimeQuery,
   searchWallpapers,
 } from "@/data/wallpapers";
 
@@ -88,7 +90,12 @@ export default function App() {
       if (trimmed) {
         setSearchQuery(trimmed);
         setView("search");
-        jikanSearch(trimmed);
+        // Only call Jikan (MyAnimeList) for anime-related searches
+        if (isAnimeQuery(trimmed)) {
+          jikanSearch(trimmed);
+        } else {
+          jikanClear();
+        }
       } else {
         setSearchQuery("");
         setView("home");
@@ -185,6 +192,8 @@ export default function App() {
   );
 
   const searchResults = view === "search" ? searchWallpapers(searchQuery) : [];
+  const detectedCategory =
+    view === "search" ? detectSearchCategory(searchQuery) : null;
   const isSearchGenerated =
     view === "search" && searchQuery.length > 0 && searchResults.length === 0;
   const displaySearchResults = isSearchGenerated
@@ -263,6 +272,7 @@ export default function App() {
                 query={searchQuery}
                 results={displaySearchResults}
                 isGenerated={isSearchGenerated}
+                detectedCategory={detectedCategory}
                 jikanResults={jikanResults}
                 jikanLoading={jikanLoading}
                 jikanError={jikanError}
@@ -632,10 +642,17 @@ function CategoryPage({
 }
 
 // ─── Search Page ──────────────────────────────────────────────
+const CATEGORY_META: Record<string, { icon: string; label: string }> = {
+  Anime: { icon: "⛩️", label: "Anime Results" },
+  Movies: { icon: "🎬", label: "Movie Results" },
+  Cricket: { icon: "🏏", label: "Cricket Results" },
+};
+
 interface SearchPageProps {
   query: string;
   results: Wallpaper[];
   isGenerated: boolean;
+  detectedCategory: "Anime" | "Movies" | "Cricket" | null;
   jikanResults: Wallpaper[];
   jikanLoading: boolean;
   jikanError: string | null;
@@ -651,6 +668,7 @@ function SearchPage({
   query,
   results,
   isGenerated,
+  detectedCategory,
   jikanResults,
   jikanLoading,
   jikanError,
@@ -661,13 +679,25 @@ function SearchPage({
   onDownload,
   getDownloadCount,
 }: SearchPageProps) {
-  // Determine whether Jikan is active (loading or has results)
+  // Determine whether Jikan is active (loading or has results) — only for anime searches
   const jikanActive = jikanLoading || jikanResults.length > 0 || !!jikanError;
+
+  // Group local results by their category for clear section display
+  const resultsByCategory = results.reduce<Record<string, Wallpaper[]>>(
+    (acc, w) => {
+      if (!acc[w.category]) acc[w.category] = [];
+      acc[w.category].push(w);
+      return acc;
+    },
+    {},
+  );
+  const categoryGroups = Object.entries(resultsByCategory);
+
   // Total count shown in header
-  const totalCount =
-    jikanResults.length > 0
-      ? jikanResults.length + results.length
-      : results.length;
+  const totalCount = jikanResults.length + results.length;
+
+  // Section heading meta — derive from detectedCategory or generic
+  const primaryMeta = detectedCategory ? CATEGORY_META[detectedCategory] : null;
 
   return (
     <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20">
@@ -696,8 +726,9 @@ function SearchPage({
         </div>
 
         <div className="mt-4 flex items-center gap-2">
+          {primaryMeta && <span className="text-xl">{primaryMeta.icon}</span>}
           <h2 className="text-foreground font-bold text-xl font-heading">
-            Results for:{" "}
+            {primaryMeta ? `${primaryMeta.label} for ` : "Results for "}
             <span className="text-gradient-violet">&ldquo;{query}&rdquo;</span>
           </h2>
           <span className="text-muted-foreground text-sm">
@@ -706,7 +737,7 @@ function SearchPage({
         </div>
       </div>
 
-      {/* ── PRIORITY: MyAnimeList / Jikan live results shown FIRST ─── */}
+      {/* ── Jikan live results — ONLY for anime searches ─── */}
       {jikanActive && (
         <section className="mb-10" aria-label="Anime search results">
           <div className="flex items-center gap-3 mb-5">
@@ -738,7 +769,7 @@ function SearchPage({
             </div>
           )}
 
-          {/* Skeleton loading grid — shown as primary loading state */}
+          {/* Skeleton loading grid */}
           {jikanLoading && jikanResults.length === 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 sm:gap-4">
               {Array.from({ length: 12 }).map((_, i) => (
@@ -774,45 +805,53 @@ function SearchPage({
             <span className="text-primary font-semibold">
               &ldquo;{query}&rdquo;
             </span>
-            . Try a more specific term like{" "}
-            <span className="text-foreground font-medium">
-              &ldquo;naruto&rdquo;
-            </span>
-            ,{" "}
-            <span className="text-foreground font-medium">
-              &ldquo;avengers&rdquo;
-            </span>
-            , or{" "}
-            <span className="text-foreground font-medium">
-              &ldquo;spider-man&rdquo;
-            </span>
             .
           </span>
         </div>
       )}
 
-      {/* Local results — shown below Jikan results as "More Wallpapers" */}
+      {/* Local results — grouped by category so movies show in Movies, cricket in Cricket, etc. */}
       {results.length > 0 ? (
         <div data-ocid="search.results_section">
-          {jikanResults.length > 0 && (
-            <div className="flex items-center gap-3 mb-5">
-              <div className="flex items-center gap-2">
-                <span className="text-xl">🖼️</span>
-                <h2 className="text-foreground font-bold text-xl font-heading tracking-tight">
-                  More Wallpapers
-                </h2>
-              </div>
-              <span className="px-2 py-0.5 rounded-full bg-muted text-muted-foreground text-xs font-medium border border-border">
-                {results.length}
-              </span>
-            </div>
+          {categoryGroups.length === 1 ? (
+            /* Single category — show results directly without sub-heading */
+            <WallpaperGrid
+              wallpapers={results}
+              onWallpaperClick={onWallpaperClick}
+              onDownload={onDownload}
+              getDownloadCount={getDownloadCount}
+            />
+          ) : (
+            /* Multiple categories — show each group with its own heading */
+            categoryGroups.map(([cat, walls]) => {
+              const meta = CATEGORY_META[cat] ?? { icon: "🖼️", label: cat };
+              return (
+                <section
+                  key={cat}
+                  className="mb-10"
+                  aria-label={`${cat} results`}
+                >
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">{meta.icon}</span>
+                      <h2 className="text-foreground font-bold text-xl font-heading tracking-tight">
+                        {meta.label}
+                      </h2>
+                    </div>
+                    <span className="px-2 py-0.5 rounded-full bg-muted text-muted-foreground text-xs font-medium border border-border">
+                      {walls.length}
+                    </span>
+                  </div>
+                  <WallpaperGrid
+                    wallpapers={walls}
+                    onWallpaperClick={onWallpaperClick}
+                    onDownload={onDownload}
+                    getDownloadCount={getDownloadCount}
+                  />
+                </section>
+              );
+            })
           )}
-          <WallpaperGrid
-            wallpapers={results}
-            onWallpaperClick={onWallpaperClick}
-            onDownload={onDownload}
-            getDownloadCount={getDownloadCount}
-          />
         </div>
       ) : (
         !jikanActive && (
