@@ -4,11 +4,12 @@ import {
   Flame,
   Layers,
   LayoutGrid,
+  Loader2,
   Search,
   TrendingUp,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { CategoryCard } from "@/components/CategoryCard";
@@ -55,6 +56,7 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const [liveSearchQuery, setLiveSearchQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
   const [selectedWallpaper, setSelectedWallpaper] = useState<Wallpaper | null>(
     null,
   );
@@ -88,6 +90,7 @@ export default function App() {
     (query: string) => {
       const trimmed = query.trim();
       if (trimmed) {
+        setIsSearching(true);
         setSearchQuery(trimmed);
         setView("search");
         // Only call Jikan (MyAnimeList) for anime-related searches
@@ -96,9 +99,12 @@ export default function App() {
         } else {
           jikanClear();
         }
+        // Brief async yield so UI renders before heavy search runs
+        setTimeout(() => setIsSearching(false), 0);
       } else {
         setSearchQuery("");
         setView("home");
+        setIsSearching(false);
         jikanClear();
       }
     },
@@ -115,6 +121,7 @@ export default function App() {
     setLiveSearchQuery("");
     setSelectedCategory("");
     setSelectedWallpaper(null);
+    setIsSearching(false);
     jikanClear();
   }, [jikanClear]);
 
@@ -191,16 +198,28 @@ export default function App() {
     [increment],
   );
 
-  const searchResults = view === "search" ? searchWallpapers(searchQuery) : [];
-  const detectedCategory =
-    view === "search" ? detectSearchCategory(searchQuery) : null;
+  const searchResults = useMemo(
+    () => (view === "search" ? searchWallpapers(searchQuery) : []),
+    [view, searchQuery],
+  );
+  const detectedCategory = useMemo(
+    () => (view === "search" ? detectSearchCategory(searchQuery) : null),
+    [view, searchQuery],
+  );
   const isSearchGenerated =
     view === "search" && searchQuery.length > 0 && searchResults.length === 0;
-  const displaySearchResults = isSearchGenerated
-    ? generateWallpapersForKeyword(searchQuery)
-    : searchResults;
-  const categoryWallpapers =
-    view === "category" ? getWallpapersByCategory(selectedCategory) : [];
+  const displaySearchResults = useMemo(
+    () =>
+      isSearchGenerated
+        ? generateWallpapersForKeyword(searchQuery)
+        : searchResults,
+    [isSearchGenerated, searchQuery, searchResults],
+  );
+  const categoryWallpapers = useMemo(
+    () =>
+      view === "category" ? getWallpapersByCategory(selectedCategory) : [],
+    [view, selectedCategory],
+  );
 
   const currentSearchValue = view === "search" ? searchQuery : liveSearchQuery;
 
@@ -272,6 +291,7 @@ export default function App() {
                 query={searchQuery}
                 results={displaySearchResults}
                 isGenerated={isSearchGenerated}
+                isSearching={isSearching}
                 detectedCategory={detectedCategory}
                 jikanResults={jikanResults}
                 jikanLoading={jikanLoading}
@@ -652,6 +672,7 @@ interface SearchPageProps {
   query: string;
   results: Wallpaper[];
   isGenerated: boolean;
+  isSearching: boolean;
   detectedCategory: "Anime" | "Movies" | "Cricket" | null;
   jikanResults: Wallpaper[];
   jikanLoading: boolean;
@@ -668,6 +689,7 @@ function SearchPage({
   query,
   results,
   isGenerated,
+  isSearching,
   detectedCategory,
   jikanResults,
   jikanLoading,
@@ -731,9 +753,16 @@ function SearchPage({
             {primaryMeta ? `${primaryMeta.label} for ` : "Results for "}
             <span className="text-gradient-violet">&ldquo;{query}&rdquo;</span>
           </h2>
-          <span className="text-muted-foreground text-sm">
-            ({totalCount} found)
-          </span>
+          {isSearching ? (
+            <Loader2
+              data-ocid="search.loading_state"
+              className="w-4 h-4 text-primary animate-spin"
+            />
+          ) : (
+            <span className="text-muted-foreground text-sm">
+              ({totalCount} found)
+            </span>
+          )}
         </div>
       </div>
 

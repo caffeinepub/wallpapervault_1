@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import type { Wallpaper } from "@/data/wallpapers";
 import { cn } from "@/lib/utils";
-import { Download, Flame, Monitor, Smartphone } from "lucide-react";
+import { Download, Flame, LayoutGrid, Monitor, Smartphone } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 
@@ -28,6 +28,7 @@ export function WallpaperCard({
 }: WallpaperCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgError, setImgError] = useState(false);
 
   const markerIndex = index + 1;
   const isMobile = wallpaper.deviceType === "mobile";
@@ -47,11 +48,11 @@ export function WallpaperCard({
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
       )}
       style={{ paddingTop: isMobile ? "177.78%" : "56.25%" }}
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
-        duration: 0.32,
-        delay: Math.min(index * 0.03, 0.35),
+        duration: 0.25,
+        delay: Math.min(index * 0.015, 0.15),
         ease: "easeOut",
       }}
       onHoverStart={() => setIsHovered(true)}
@@ -60,8 +61,20 @@ export function WallpaperCard({
       aria-label={`View ${wallpaper.title} wallpaper`}
     >
       {/* Skeleton shimmer — shown until image loads */}
-      {!imgLoaded && (
+      {!imgLoaded && !imgError && (
         <div className="absolute inset-0 bg-gradient-to-r from-muted via-secondary to-muted bg-[length:200%_100%] animate-shimmer" />
+      )}
+
+      {/* Error fallback — shown when image fails to load */}
+      {imgError && (
+        <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 to-zinc-800 flex flex-col items-center justify-center gap-2 p-4">
+          <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+            <LayoutGrid className="w-5 h-5 text-white/30" />
+          </div>
+          <p className="text-white/40 text-[10px] text-center line-clamp-2 font-medium">
+            {wallpaper.title}
+          </p>
+        </div>
       )}
 
       {/* Thumbnail image */}
@@ -72,10 +85,14 @@ export function WallpaperCard({
           "absolute inset-0 w-full h-full object-cover",
           "transition-transform duration-500 ease-out",
           isHovered ? "scale-[1.06]" : "scale-100",
-          imgLoaded ? "opacity-100" : "opacity-0",
+          imgLoaded && !imgError ? "opacity-100" : "opacity-0",
         )}
         loading="lazy"
         onLoad={() => setImgLoaded(true)}
+        onError={() => {
+          setImgError(true);
+          setImgLoaded(true);
+        }}
       />
 
       {/* Permanent soft vignette at bottom so badges are always readable */}

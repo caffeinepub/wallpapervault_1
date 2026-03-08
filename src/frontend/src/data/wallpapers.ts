@@ -1,5 +1,8 @@
 import { ANIME_SERIES_WALLPAPERS } from "./animeWallpapers";
-import { CRICKET_WALLPAPERS } from "./cricketWallpapers";
+import {
+  CRICKET_PLAYERS_WALLPAPERS,
+  CRICKET_WALLPAPERS,
+} from "./cricketWallpapers";
 import { MOVIE_WALLPAPERS } from "./movieWallpapers";
 
 export type Wallpaper = {
@@ -6666,6 +6669,7 @@ export const WALLPAPERS: Wallpaper[] = [
   ...(ANIME_SERIES_WALLPAPERS as Wallpaper[]),
   ...(MOVIE_WALLPAPERS as Wallpaper[]),
   ...(CRICKET_WALLPAPERS as Wallpaper[]),
+  ...(CRICKET_PLAYERS_WALLPAPERS as Wallpaper[]),
 
   // ─── ONE PIECE (10) ───────────────────────────────────────────
   {

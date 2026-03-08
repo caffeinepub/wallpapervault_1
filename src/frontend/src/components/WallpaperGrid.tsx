@@ -1,5 +1,8 @@
 import type { Wallpaper } from "@/data/wallpapers";
+import { useState } from "react";
 import { WallpaperCard } from "./WallpaperCard";
+
+const PAGE_SIZE = 48;
 
 interface WallpaperGridProps {
   wallpapers: Wallpaper[];
@@ -16,6 +19,15 @@ export function WallpaperGrid({
   indexOffset = 0,
   getDownloadCount,
 }: WallpaperGridProps) {
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+  // Reset pagination when wallpaper list changes
+  const wallpaperKey = wallpapers.length > 0 ? wallpapers[0].id : "empty";
+
+  const visibleWallpapers = wallpapers.slice(0, visibleCount);
+  const hasMore = visibleCount < wallpapers.length;
+  const remaining = wallpapers.length - visibleCount;
+
   if (wallpapers.length === 0) {
     return (
       <div
@@ -51,25 +63,44 @@ export function WallpaperGrid({
   }
 
   return (
-    /*
-     * CSS columns masonry: items flow naturally into columns respecting their
-     * intrinsic aspect ratio. `break-inside-avoid` on each card prevents
-     * column breaks mid-card.
-     */
-    <div className="masonry-grid">
-      {wallpapers.map((wallpaper, i) => (
-        <div key={wallpaper.id} className="masonry-item">
-          <WallpaperCard
-            wallpaper={wallpaper}
-            index={indexOffset + i}
-            onClick={onWallpaperClick}
-            onDownload={onDownload}
-            downloadCount={
-              getDownloadCount ? getDownloadCount(wallpaper.id) : 0
-            }
-          />
+    <div key={wallpaperKey}>
+      {/*
+       * CSS columns masonry: items flow naturally into columns respecting their
+       * intrinsic aspect ratio. `break-inside-avoid` on each card prevents
+       * column breaks mid-card.
+       */}
+      <div className="masonry-grid">
+        {visibleWallpapers.map((wallpaper, i) => (
+          <div key={wallpaper.id} className="masonry-item">
+            <WallpaperCard
+              wallpaper={wallpaper}
+              index={indexOffset + i}
+              onClick={onWallpaperClick}
+              onDownload={onDownload}
+              downloadCount={
+                getDownloadCount ? getDownloadCount(wallpaper.id) : 0
+              }
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Load More button */}
+      {hasMore && (
+        <div className="flex flex-col items-center mt-10 gap-2">
+          <p className="text-muted-foreground text-sm">
+            Showing {visibleCount} of {wallpapers.length} wallpapers
+          </p>
+          <button
+            type="button"
+            data-ocid="gallery.load_more_button"
+            onClick={() => setVisibleCount((prev) => prev + PAGE_SIZE)}
+            className="px-6 py-2.5 rounded-xl bg-primary/20 hover:bg-primary/30 border border-primary/30 text-primary font-semibold text-sm transition-colors duration-150"
+          >
+            Load {Math.min(remaining, PAGE_SIZE)} More
+          </button>
         </div>
-      ))}
+      )}
     </div>
   );
 }
