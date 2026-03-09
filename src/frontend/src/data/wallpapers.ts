@@ -7447,6 +7447,73 @@ export const WALLPAPERS: Wallpaper[] = [
     ],
     isTrending: false,
   },
+
+  // ─── ROHIT SHARMA 264 (user-added) ────────────────────────────
+  {
+    id: 40060,
+    title: "Rohit Sharma 264",
+    category: "Cricket",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1540747913346-19378ff66ef9?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1540747913346-19378ff66ef9?w=3840&q=95",
+    tags: [
+      "rohit",
+      "rohit sharma",
+      "cricket",
+      "india",
+      "264",
+      "odi record",
+      "hitman",
+      "4k",
+    ],
+    isTrending: true,
+  },
+  {
+    id: 40061,
+    title: "Rohit 264 Record Innings",
+    category: "Cricket",
+    resolution: "4K",
+    deviceType: "mobile",
+    imageUrl:
+      "https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=3840&q=95",
+    tags: [
+      "rohit",
+      "rohit sharma",
+      "cricket",
+      "india",
+      "264",
+      "odi",
+      "record",
+      "hitman",
+    ],
+    isTrending: false,
+  },
+  {
+    id: 40062,
+    title: "Rohit Sharma 264 Ultra HD",
+    category: "Cricket",
+    resolution: "4K",
+    deviceType: "desktop",
+    imageUrl:
+      "https://images.unsplash.com/photo-1594882645126-14020914d58d?w=800&q=80",
+    fullUrl:
+      "https://images.unsplash.com/photo-1594882645126-14020914d58d?w=3840&q=95",
+    tags: [
+      "rohit",
+      "rohit sharma",
+      "cricket",
+      "india",
+      "264",
+      "highest odi score",
+      "4k ultra hd",
+    ],
+    isTrending: false,
+  },
 ];
 
 export const CATEGORIES: Category[] = [
@@ -7880,6 +7947,10 @@ const SEARCH_SYNONYMS: Record<string, string[]> = {
   fastfurious: ["fast furious", "fast and furious"],
   "fast furious": ["fastfurious", "fast and furious"],
   "fast and furious": ["fast furious", "fastfurious"],
+  rohit: ["rohit sharma", "hitman", "264"],
+  "rohit sharma": ["rohit", "hitman", "264", "odi record"],
+  hitman: ["rohit sharma", "rohit"],
+  "264": ["rohit sharma", "rohit", "odi record"],
   naruto: ["ninja", "shinobi", "jutsu"],
   anime: ["manga", "shonen", "shojo"],
   movie: ["movies", "film", "cinema"],
